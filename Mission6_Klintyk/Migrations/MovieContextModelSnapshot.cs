@@ -52,7 +52,7 @@ namespace Mission6_Klintyk.Migrations
 
                     b.HasKey("FilmID");
 
-                    b.ToTable("responses");
+                    b.ToTable("Responses");
 
                     b.HasData(
                         new

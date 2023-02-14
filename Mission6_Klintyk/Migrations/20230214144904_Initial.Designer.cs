@@ -8,7 +8,7 @@ using Mission6_Klintyk.Models;
 namespace Mission6_Klintyk.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20230214054738_Initial")]
+    [Migration("20230214144904_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,7 +54,7 @@ namespace Mission6_Klintyk.Migrations
 
                     b.HasKey("FilmID");
 
-                    b.ToTable("responses");
+                    b.ToTable("Responses");
 
                     b.HasData(
                         new
