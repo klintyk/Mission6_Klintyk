@@ -14,7 +14,7 @@ namespace Mission6_Klintyk.Models
         {
 
         }
-        public DbSet<Movie> responses { get; set; }
+        public DbSet<Movie> Responses { get; set; }
         protected override void OnModelCreating(ModelBuilder mb)
         {
             mb.Entity<Movie>().HasData(
