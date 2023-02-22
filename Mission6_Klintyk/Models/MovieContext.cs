@@ -77,5 +77,10 @@ namespace Mission6_Klintyk.Models
                   }
                 );
         }
+
+        internal void Update()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

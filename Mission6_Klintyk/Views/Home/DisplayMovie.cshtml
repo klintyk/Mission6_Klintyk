@@ -18,6 +18,8 @@
             <td> Edited</td>
             <td> Lent_to</td>
             <td> Notes</td>
+            <td></td>
+            <td></td>
         </tr>
     </thead>
     <tbody>
@@ -33,6 +35,8 @@
             <td>@x.Edited</td>
             <td>@x.Lent_to</td>
             <td>@x.Notes</td>
+            <td><a class="btn-block" asp-controller="Home" asp-action="EditFilm" asp-route-filmid="@x.FilmID">Edit</a></td>
+            <td><a class="btn-block" asp-controller="Home" asp-action="DeleteFilm" asp-route-filmid="@x.FilmID">Delete</a></td>
         </tr>
             }
     </tbody>

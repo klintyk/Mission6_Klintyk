@@ -1,0 +1,16 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Delete Film";
+
+}
+@model Movie
+<h2> Confirm Delete</h2>
+<h3> Are you sure you want to remove @Model.Title from your collection</h3>
+
+<form method="post" asp-action="DeleteFilm">
+    <button type="submit">Confirm</button>
+    <a class="btn btn-primary" asp-controller="Home" asp-action="DisplayMovie">Cancel</a>
+    <input type="hidden" asp-for="FilmID" />
+ </form>

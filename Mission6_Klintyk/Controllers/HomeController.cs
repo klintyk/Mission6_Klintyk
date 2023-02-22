@@ -39,13 +39,23 @@ namespace Mission6_Klintyk.Controllers
         [HttpPost]
         public IActionResult NewMovie(Movie model)
         {
+            if (ModelState.IsValid)
+            {
             _filmContext.Add(model);
             _filmContext.SaveChanges();
             return View("Confirmation", model);
+            }
+            else //if not valid
+            {
+                ViewBag.Categories = _filmContext.Categories.ToList();
+                return View(model);
+            }
+            
         }
        
 
         //displays the collection of films
+        [HttpGet]
         public IActionResult DisplayMovie()
         {
             var films =_filmContext.Responses
@@ -54,6 +64,35 @@ namespace Mission6_Klintyk.Controllers
                 .ToList();
             return View(films);
         }
-       
+        [HttpGet]
+        public IActionResult EditFilm(int filmid)
+        {
+            //send viewbag to this page
+            ViewBag.Categories = _filmContext.Categories.ToList();
+            var film = _filmContext.Responses.Single(x => x.FilmID == filmid);
+            return View("NewMovie", film);
+        }
+
+        [HttpPost]
+        public IActionResult EditFilm(Movie film)
+        {
+            _filmContext.Update(film);
+            _filmContext.SaveChanges();
+
+            return RedirectToAction("DisplayMovie");
+        }
+        [HttpGet]
+        public IActionResult DeleteFilm(int filmid)
+        {
+            var film = _filmContext.Responses.Single(x => x.FilmID == filmid);
+            return View(film);
+        }
+        [HttpPost]
+        public IActionResult DeleteFilm(Movie mv)
+        {
+            _filmContext.Responses.Remove(mv);
+            _filmContext.SaveChanges();
+            return RedirectToAction("DisplayMovie");
+        }
     }
 }

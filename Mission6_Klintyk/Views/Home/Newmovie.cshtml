@@ -6,6 +6,8 @@
 @model Mission6_Klintyk.Models.Movie
 <div>
     <form method="post">
+        <div asp-validation-summary="All"> </div>
+
         <label asp-for="CategoryId"> Category: </label>
         <select asp-for="CategoryId">
             <option value="">Select a Category</option>
