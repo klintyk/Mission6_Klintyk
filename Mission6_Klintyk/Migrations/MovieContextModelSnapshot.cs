@@ -15,15 +15,55 @@ namespace Mission6_Klintyk.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.22");
 
+            modelBuilder.Entity("Mission6_Klintyk.Models.CategoryResponse", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Category")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            Category = "Action/Adventure"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            Category = "Comedy"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            Category = "Thriller"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            Category = "Romance"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            Category = "Western"
+                        });
+                });
+
             modelBuilder.Entity("Mission6_Klintyk.Models.Movie", b =>
                 {
                     b.Property<int>("FilmID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Director")
                         .IsRequired()
@@ -52,13 +92,15 @@ namespace Mission6_Klintyk.Migrations
 
                     b.HasKey("FilmID");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Responses");
 
                     b.HasData(
                         new
                         {
                             FilmID = 1,
-                            Category = "Action/Adventure",
+                            CategoryId = 1,
                             Director = "Ryan Coogler",
                             Edited = false,
                             Lent_to = "Oliva Olred",
@@ -70,7 +112,7 @@ namespace Mission6_Klintyk.Migrations
                         new
                         {
                             FilmID = 2,
-                            Category = "Comedy",
+                            CategoryId = 2,
                             Director = "Frank Coraci",
                             Edited = true,
                             Lent_to = "",
@@ -82,7 +124,7 @@ namespace Mission6_Klintyk.Migrations
                         new
                         {
                             FilmID = 3,
-                            Category = "Action/Adventure",
+                            CategoryId = 1,
                             Director = "David Dobkin",
                             Edited = false,
                             Lent_to = "Carter Jenses",
@@ -90,7 +132,28 @@ namespace Mission6_Klintyk.Migrations
                             Rating = "PG-13",
                             Title = "Shanghai Knights",
                             Year = 2003
+                        },
+                        new
+                        {
+                            FilmID = 4,
+                            CategoryId = 5,
+                            Director = "Alejandro G.Iñárritu",
+                            Edited = false,
+                            Lent_to = "",
+                            Notes = "",
+                            Rating = "R",
+                            Title = "The Revnant",
+                            Year = 2015
                         });
+                });
+
+            modelBuilder.Entity("Mission6_Klintyk.Models.Movie", b =>
+                {
+                    b.HasOne("Mission6_Klintyk.Models.CategoryResponse", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

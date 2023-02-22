@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mission6_Klintyk.Models;
 using System;
@@ -11,16 +12,15 @@ namespace Mission6_Klintyk.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
+   
+        //constructor
         private MovieContext _filmContext { get; set; }
 
-        public HomeController(ILogger<HomeController> logger, MovieContext someName)
+        public HomeController(MovieContext someName)
         {
-            _logger = logger;
             _filmContext = someName;
         }
-
+       
         public IActionResult Index()
         {
             return View();
@@ -32,24 +32,67 @@ namespace Mission6_Klintyk.Controllers
         [HttpGet]
         public IActionResult NewMovie()
         {
+            ViewBag.Categories = _filmContext.Categories.ToList();
+
             return View();
         }
         [HttpPost]
         public IActionResult NewMovie(Movie model)
         {
+            if (ModelState.IsValid)
+            {
             _filmContext.Add(model);
             _filmContext.SaveChanges();
             return View("Confirmation", model);
+            }
+            else //if not valid
+            {
+                ViewBag.Categories = _filmContext.Categories.ToList();
+                return View(model);
+            }
+            
         }
-        public IActionResult Privacy()
+       
+
+        //displays the collection of films
+        [HttpGet]
+        public IActionResult DisplayMovie()
         {
-            return View();
+            var films =_filmContext.Responses
+                .Include(x => x.Category)
+                .OrderBy(x=>x.Year)
+                .ToList();
+            return View(films);
+        }
+        [HttpGet]
+        public IActionResult EditFilm(int filmid)
+        {
+            //send viewbag to this page
+            ViewBag.Categories = _filmContext.Categories.ToList();
+            var film = _filmContext.Responses.Single(x => x.FilmID == filmid);
+            return View("NewMovie", film);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public IActionResult EditFilm(Movie film)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            _filmContext.Update(film);
+            _filmContext.SaveChanges();
+
+            return RedirectToAction("DisplayMovie");
+        }
+        [HttpGet]
+        public IActionResult DeleteFilm(int filmid)
+        {
+            var film = _filmContext.Responses.Single(x => x.FilmID == filmid);
+            return View(film);
+        }
+        [HttpPost]
+        public IActionResult DeleteFilm(Movie mv)
+        {
+            _filmContext.Responses.Remove(mv);
+            _filmContext.SaveChanges();
+            return RedirectToAction("DisplayMovie");
         }
     }
 }
