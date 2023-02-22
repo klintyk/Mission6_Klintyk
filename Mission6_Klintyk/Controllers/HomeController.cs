@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mission6_Klintyk.Models;
 using System;
@@ -11,16 +12,15 @@ namespace Mission6_Klintyk.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
+   
+        //constructor
         private MovieContext _filmContext { get; set; }
 
-        public HomeController(ILogger<HomeController> logger, MovieContext someName)
+        public HomeController(MovieContext someName)
         {
-            _logger = logger;
             _filmContext = someName;
         }
-
+       
         public IActionResult Index()
         {
             return View();
@@ -32,6 +32,8 @@ namespace Mission6_Klintyk.Controllers
         [HttpGet]
         public IActionResult NewMovie()
         {
+            ViewBag.Categories = _filmContext.Categories.ToList();
+
             return View();
         }
         [HttpPost]
@@ -41,15 +43,17 @@ namespace Mission6_Klintyk.Controllers
             _filmContext.SaveChanges();
             return View("Confirmation", model);
         }
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+       
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        //displays the collection of films
+        public IActionResult DisplayMovie()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var films =_filmContext.Responses
+                .Include(x => x.Category)
+                .OrderBy(x=>x.Year)
+                .ToList();
+            return View(films);
         }
+       
     }
 }

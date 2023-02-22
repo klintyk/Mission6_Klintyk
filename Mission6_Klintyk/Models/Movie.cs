@@ -12,7 +12,9 @@ namespace Mission6_Klintyk.Models
         [Required]
         public int FilmID { get; set; }
         [Required]
-        public string Category { get; set; }
+        //foreign key to category table
+        public int CategoryId { get; set; }
+        public CategoryResponse Category { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]

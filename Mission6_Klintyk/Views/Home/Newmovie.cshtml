@@ -6,8 +6,14 @@
 @model Mission6_Klintyk.Models.Movie
 <div>
     <form method="post">
-        <label asp-for="Category"> Category: </label>
-        <input asp-for="Category" /><br />
+        <label asp-for="CategoryId"> Category: </label>
+        <select asp-for="CategoryId">
+            <option value="">Select a Category</option>
+            @foreach(CategoryResponse x in ViewBag.Categories)
+            {
+                <option value="@x.CategoryId">@x.Category</option>
+            }
+        </select> <br />
 
         <label asp-for="Title">Title: </label>
         <input asp-for="Title" /><br />
